@@ -35,6 +35,7 @@ From here you will see the page is in a constant stage of loading. This is the *
 * [Kafka Quick Start Guide](https://kafka.apache.org/quickstart)
 * [Kafka-Connect-SFTP Plugin Download](https://www.confluent.io/hub/confluentinc/kafka-connect-sftp)
 * [SFTP Source Connector for Confluent Platform](https://docs.confluent.io/current/connect/kafka-connect-sftp/source-connector/index.html)
+* [atmoz SFTP docker hub](https://hub.docker.com/r/atmoz/sftp/)
 
 # Video Demonstration
-I have a video demonstration here.
+I have a video demonstration [here](https://youtu.be/USXvAYiZn64).
