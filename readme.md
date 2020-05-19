@@ -1,4 +1,4 @@
-# Kafka-Connect SFTP
+# Kafka Connect SFTP Source Connector
 This demo project contains a docker-compose that will start up 5 services that will demonstrate the use case of using Kafka-Connect source connectors to pull files from an FTP server, post it to a Kafka topic which will be read by a consumer application. For this demo, we will be using Confluent Kafka.
 
 1. Zookeeper
