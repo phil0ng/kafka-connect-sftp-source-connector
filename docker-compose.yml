@@ -1,0 +1,62 @@
+version: '3'
+
+networks:
+    demo-network:
+        driver: bridge
+
+services:
+    zookeeper:
+        image: confluentinc/cp-zookeeper:5.0.0
+        environment: 
+            ZOOKEEPER_CLIENT_PORT: 2181
+        container_name: zookeeper
+        networks: 
+            - demo-network
+    kafka:
+        image: confluentinc/cp-kafka:5.0.0
+        container_name: kafka
+        depends_on: 
+            - zookeeper
+        environment: 
+            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+            KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+            KAFKA_ADVERTISED_HOST_NAME: kafka
+        networks: 
+            - demo-network
+    ftp-server:
+        image: atmoz/sftp
+        container_name: ftp-server
+        volumes:
+            - [PUT LOCAL DIRECTORY HERE]:/home/ftpuser/ftp
+        networks: 
+            - demo-network
+        command: ftpuser:abcd1234
+    kafka-connect-configuration:
+        build:
+            context: kafka_connect_configuration
+            dockerfile: Dockerfile
+        container_name: kafka-connect-configuration
+        depends_on:
+            - zookeeper
+            - kafka
+            - ftp-server
+        environment:
+            ZOOKEEPER_HOSTS: "zookeeper:2181"
+            KAFKA_TOPIC: "kafka-sftp-demo"
+        networks: 
+            - demo-network
+    consumer:
+        build: kafka_consumer_app/
+        container_name: consumer
+        depends_on: 
+            - kafka
+            - zookeeper
+            - kafka-connect-configuration
+        ports:
+            - 8080:5001
+        environment: 
+            KAFKA_TOPIC: "kafka-sftp-demo"
+            KAFKA_HOST: "kafka:9092"
+        networks: 
+            - demo-network
